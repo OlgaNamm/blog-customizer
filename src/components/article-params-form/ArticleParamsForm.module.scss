@@ -25,8 +25,23 @@
 	border-right: 1px solid #000000;
 }
 
+.title {
+	margin-bottom: 50px;
+}
+
+.fields {
+	display: flex;
+	flex-direction: column;
+	gap: 50px;
+}
+
 .bottomContainer {
 	display: flex;
 	justify-content: space-between;
 	margin-top: auto;
+	padding-top: 50px;
+}
+
+.separator {
+	margin: 0;
 }

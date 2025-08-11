@@ -1,12 +1,10 @@
 import { FC, FormEvent, useEffect, useState, useRef, useCallback } from 'react';
 import clsx from 'clsx';
-
 import { ArrowButton } from 'src/ui/arrow-button';
 import { Button } from 'src/ui/button';
 import { Text } from 'src/ui/text';
 import { Select } from 'src/ui/select';
 import { RadioGroup } from 'src/ui/radio-group';
-
 import {
 	defaultArticleState,
 	ArticleStateType,
@@ -16,23 +14,19 @@ import {
 	contentWidthArr,
 	backgroundColors,
 } from 'src/constants/articleProps';
-
 import styles from './ArticleParamsForm.module.scss';
 
 interface ArticleParamsFormProps {
 	currentSettings: ArticleStateType;
-	isOpen: boolean;
-	onClose: () => void;
 	onApply: (settings: ArticleStateType) => void;
 }
 
 export const ArticleParamsForm: FC<ArticleParamsFormProps> = ({
 	currentSettings,
-	isOpen,
-	onClose,
 	onApply,
 }) => {
 	const [formState, setFormState] = useState(currentSettings);
+	const [isOpen, setIsOpen] = useState(false);
 	const asideRef = useRef<HTMLElement>(null);
 
 	useEffect(() => {
@@ -47,7 +41,7 @@ export const ArticleParamsForm: FC<ArticleParamsFormProps> = ({
 				asideRef.current &&
 				!asideRef.current.contains(event.target as Node)
 			) {
-				onClose();
+				setIsOpen(false);
 			}
 		};
 
@@ -55,7 +49,7 @@ export const ArticleParamsForm: FC<ArticleParamsFormProps> = ({
 		return () => {
 			document.removeEventListener('mousedown', handleClickOutside);
 		};
-	}, [isOpen, onClose]);
+	}, [isOpen]);
 
 	const handleChange = useCallback(
 		<K extends keyof ArticleStateType>(
@@ -71,23 +65,27 @@ export const ArticleParamsForm: FC<ArticleParamsFormProps> = ({
 		(e: FormEvent) => {
 			e.preventDefault();
 			onApply(formState);
-			onClose();
+			setIsOpen(false);
 		},
-		[formState, onApply, onClose]
+		[formState, onApply]
 	);
 
 	const handleReset = useCallback(
 		(e: FormEvent) => {
 			e.preventDefault();
 			onApply(defaultArticleState);
-			onClose();
+			setIsOpen(false);
 		},
-		[onApply, onClose]
+		[onApply]
 	);
+
+	const toggleOpen = useCallback(() => {
+		setIsOpen((prev) => !prev);
+	}, []);
 
 	return (
 		<>
-			<ArrowButton isOpen={isOpen} onClick={onClose} />
+			<ArrowButton isOpen={isOpen} onClick={toggleOpen} />
 			<aside
 				ref={asideRef}
 				className={clsx(styles.container, isOpen && styles.container_open)}>
@@ -96,8 +94,8 @@ export const ArticleParamsForm: FC<ArticleParamsFormProps> = ({
 					onSubmit={handleApply}
 					onReset={handleReset}>
 					<div className={styles.title}>
-						<Text as='h2' size={31} weight={800} uppercase align='center'>
-							ЗАДАЙТЕ ПАРАМЕТРЫ
+						<Text as='h2' size={31} weight={800} uppercase align='left'>
+							Задайте параметры
 						</Text>
 					</div>
 					<div className={styles.fields}>
