@@ -3,6 +3,7 @@ import clsx from 'clsx';
 
 import { ArrowButton } from 'src/ui/arrow-button';
 import { Button } from 'src/ui/button';
+import { Text } from 'src/ui/text';
 import { Select } from 'src/ui/select';
 import { RadioGroup } from 'src/ui/radio-group';
 
@@ -94,6 +95,11 @@ export const ArticleParamsForm: FC<ArticleParamsFormProps> = ({
 					className={styles.form}
 					onSubmit={handleApply}
 					onReset={handleReset}>
+					<div className={styles.title}>
+						<Text as='h2' size={31} weight={800} uppercase align='center'>
+							ЗАДАЙТЕ ПАРАМЕТРЫ
+						</Text>
+					</div>
 					<div className={styles.fields}>
 						<Select
 							title='Шрифт'
